@@ -15,8 +15,9 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 
 let cityNameInput: HTMLInputElement | null =
   document.querySelector("#enteredUserInput");
-let displayWeatherInfo: HTMLParagraphElement =
-  document.getElementById("displayWeather");
+let displayWeatherInfo = document.getElementById(
+  "displayWeather"
+) as HTMLParagraphElement;
 let receivedweatherData: { city: string; weather: string; temp: string } | null;
 
 cityNameInput?.addEventListener(
