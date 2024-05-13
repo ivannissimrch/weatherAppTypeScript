@@ -1,0 +1,29 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  padding: 100px;
+  background-color: rgb(135, 161, 234);
+  color: white;
+  font-size: x-large;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 500px;
+}
+
+input {
+  height: 35px;
+  width: 500px;
+}
+
+button {
+  width: 500px;
+  padding: 25px;
+  height: 35px;
+}
