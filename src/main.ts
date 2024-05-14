@@ -17,6 +17,10 @@ appElement.innerHTML = `
   </main>
 `;
 
+const formElement = document.getElementsByTagName("form")[0];
+if (!formElement) {
+  throw new Error("Cannot find form element");
+}
 const cityNameInput =
   document.getElementById("enteredUserInput") as HTMLInputElement | null;
 if (!cityNameInput) {
@@ -30,23 +34,21 @@ if (!displayWeatherInfo) {
   throw new Error("Cannot find an element with ID \"displayWeather\"");
 }
 
-cityNameInput.addEventListener(
-  "keydown",
-  async (event: KeyboardEvent) => {
-    if (event.key === "Enter") {
-      try {
-        event.preventDefault();
-        const cityEntered = cityNameInput.value;
-        cityNameInput.value = "";
-        const receivedweatherData = await getWeatherInfo(cityEntered);
+formElement.addEventListener(
+  "submit",
+  async (event: SubmitEvent) => {
+    try {
+      event.preventDefault();
+      const cityEntered = cityNameInput.value;
+      cityNameInput.value = "";
+      const receivedweatherData = await getWeatherInfo(cityEntered);
 
-        if (receivedweatherData) {
-          const { city, temp, weather } = receivedweatherData;
-          displayWeatherInfo.innerHTML = `${city} Temperature: ${temp} Weather Conditions: ${weather}`;
-        }
-      } catch (error) {
-        displayWeatherInfo.innerHTML = `City not found, please try again`;
+      if (receivedweatherData) {
+        const { city, temp, weather } = receivedweatherData;
+        displayWeatherInfo.innerHTML = `${city} Temperature: ${temp} Weather Conditions: ${weather}`;
       }
+    } catch (error) {
+      displayWeatherInfo.innerHTML = `City not found, please try again`;
     }
   }
 );
