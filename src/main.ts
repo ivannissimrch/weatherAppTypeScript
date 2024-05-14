@@ -1,7 +1,11 @@
 import { getWeatherInfo } from "./getWeatherInfo";
 import "./style.css";
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
+const appElement = document.getElementById("app");
+if (!appElement) {
+  throw new Error("Cannot find an element with ID \"app\"");
+}
+appElement.innerHTML = `
   <main>
   <form >
   <input type='text'  id='enteredUserInput' placeholder='enter city name'>  
@@ -13,30 +17,38 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   </main>
 `;
 
-let cityNameInput: HTMLInputElement | null =
-  document.querySelector("#enteredUserInput");
-let displayWeatherInfo = document.getElementById(
+const formElement = document.getElementsByTagName("form")[0];
+if (!formElement) {
+  throw new Error("Cannot find form element");
+}
+const cityNameInput =
+  document.getElementById("enteredUserInput") as HTMLInputElement | null;
+if (!cityNameInput) {
+  throw new Error("Cannot find an element with ID \"enteredUserInput\"");
+}
+
+const displayWeatherInfo = document.getElementById(
   "displayWeather"
-) as HTMLParagraphElement;
-let receivedweatherData: { city: string; weather: string; temp: string } | null;
+) as HTMLParagraphElement | null;
+if (!displayWeatherInfo) {
+  throw new Error("Cannot find an element with ID \"displayWeather\"");
+}
 
-cityNameInput?.addEventListener(
-  "keydown",
-  async (event: KeyboardEvent): Promise<void> => {
-    if (event.key === "Enter") {
-      try {
-        event.preventDefault();
-        let cityEntered = cityNameInput.value;
-        cityNameInput.value = "";
-        receivedweatherData = await getWeatherInfo(cityEntered);
+formElement.addEventListener(
+  "submit",
+  async (event: SubmitEvent) => {
+    try {
+      event.preventDefault();
+      const cityEntered = cityNameInput.value;
+      cityNameInput.value = "";
+      const receivedweatherData = await getWeatherInfo(cityEntered);
 
-        if (receivedweatherData) {
-          const { city, temp, weather } = receivedweatherData;
-          displayWeatherInfo.innerHTML = `${city} Temperature: ${temp} Weather Conditions: ${weather}`;
-        }
-      } catch (error) {
-        displayWeatherInfo.innerHTML = `City not found, please try again`;
+      if (receivedweatherData) {
+        const { city, temp, weather } = receivedweatherData;
+        displayWeatherInfo.innerHTML = `${city} Temperature: ${temp} Weather Conditions: ${weather}`;
       }
+    } catch (error) {
+      displayWeatherInfo.innerHTML = `City not found, please try again`;
     }
   }
 );
